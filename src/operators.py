@@ -16,6 +16,9 @@ grad_test_func : callable
 H_dimensions : list[int]
     Dimensions of each of the considered Hilbert spaces.
 """
+
+#I have gone over this and made the relevant changes for the multidimensional case
+
 import numpy as np
 
 # Local imports
@@ -143,7 +146,7 @@ def K_t(t, f_t):
     Returns
     -------
     callable[numpy.ndarray, numpy.ndarray]
-        function that takes (N,2)-sized arrays represnting ``N`` points in
+        function that takes (N,d)-sized arrays represnting ``N`` points in
         the domain Ω, and returns a (N,1)-sized array.
 
     Notes
@@ -183,7 +186,7 @@ def grad_K_t(t, f):
     -------
     callable[numpy.ndarray, numpy.ndarray]
         function that takes (N,2)-sized arrays represnting ``N`` points in
-        the domain Ω, and returns a (2,N,1)-sized array, with the first
+        the domain Ω, and returns a (d,N,1)-sized array, with the first
         dimension corresponding to each partial derivative.
 
     Notes

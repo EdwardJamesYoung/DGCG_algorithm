@@ -7,6 +7,9 @@ unit tests.
 
 Undocumented.
 """
+
+#I have gone over this once to change what needs to be changed to adapt the algorithm to arbitrary dimensions.
+
 # Standard imports
 import numpy as np
 import sys
@@ -61,9 +64,9 @@ def H_t_product_full(f,g):
 
 def is_in_space_domain(x):
     # x is a numpy array of numpy D dimensional vectors.
-    # i.e. x is a NxD sized vector, with D = 2
+    # i.e. x is a NxD sized vector, with D = config.d
     if isinstance(x, np.ndarray):
-        if x.shape[1] == 2:
+        if x.shape[1] == config.d:
             return True
     return False
 

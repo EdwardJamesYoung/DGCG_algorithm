@@ -9,6 +9,9 @@ of the DGCG algorithm. Al parameters are set at execution of
 Therefore, to modify any of these parameters, do it before executing
 :py:meth:`src.DGCG.solve`
 """
+
+#I have gone over this modules once to change what is necessary to adapt the algorithm to three dimensions
+
 # Standard imports
 import pickle
 import numpy as np
@@ -63,6 +66,12 @@ numpy.ndarray.
     The associated weights to each time sample. By default, these are equally
     weighted summing up to 1. Relevant when dealing with different uncertainty
     values for each time sample.
+"""
+
+#Spatial dimensions
+d = 2
+"""
+The number of spacial dimensions in which the original curves are permitted to move. 
 """
 
 # Problem coefficients

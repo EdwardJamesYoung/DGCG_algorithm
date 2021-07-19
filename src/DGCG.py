@@ -10,7 +10,7 @@ from . import log_mod
 from . import checker
 
 
-def set_model_parameters(alpha, beta, time_samples, H_dimensions,
+def set_model_parameters(alpha, beta, time_samples, H_dimensions, space_dimensions
                          test_func, grad_test_func):
     """Set the the fundamental parameters of the model.
 
@@ -24,6 +24,8 @@ def set_model_parameters(alpha, beta, time_samples, H_dimensions,
         and ``time_samples[-1] = 1``.
     H_dimension: list[int]
         List of dimensions of the considered Hilbert spaces ``H_t``.
+    space_dimensions: int
+        dimension d of the domain \Omega. More specifically, \Omega = (0,1)^d
     test_func : callable[[int, numpy.ndarray], numpy.ndarray]
         Function φ that defines the forward measurements. The first input
         is time, the second input is a list of elements in the domain Ω. It
@@ -47,26 +49,28 @@ def set_model_parameters(alpha, beta, time_samples, H_dimensions,
     The ``test_func`` φ is the funciton that defines the forward measurements.
     The first input is a time sample in ``[0, 1, ..., T-1]``, with ``T`` the
     total number of time samples. The second input is a list of ``N`` elements
-    in Ω, expressed as a (N,2) ``numpy.ndarray`` (Ω is of dimension 2).
+    in Ω, expressed as a (N,d) ``numpy.ndarray`` (Ω is of dimension d).
 
     The output of φ is a list of ``N`` elements in ``H_t``, since the
     dimension of ``H_t`` is input with ``H_dimensions``, then the output
     of φ(t, x) is a (N, H_dimensions[t]) ``numpy.ndarray``
 
     The function ``grad_test_func`` ∇φ has the same input, but the output is
-    a (2, N, H_dimensions[t]) tuple representing the two partial derivatives
-    ∂_x and ∂_y respectively.
+    a (d, N, H_dimensions[t]) tuple representing the partial derivatives of \phi
     """
     config.alpha = alpha
     config.beta = beta
     T = len(time_samples)
     config.T = T
     config.time = time_samples
+    config.d = space_dimensions
     # Check that the input dimensions are integers
     tol_error = 1e-10
     rounded_H_dim = np.array([np.round(dim) for dim in H_dimensions], dtype=int)
     if np.any(np.abs(rounded_H_dim - np.array(H_dimensions)) > tol_error):
-        raise Exception('The given dimensions are not integer numbers')
+        raise Exception('The given dimensions are not integer numbers.')
+    if !isinstance(space_dimensions, int):
+        raise Exception('The number of spacial dimensions must be an integer.')
     operators.H_DIMENSIONS = rounded_H_dim
     operators.TEST_FUNC = test_func
     operators.GRAD_TEST_FUNC = grad_test_func
@@ -143,7 +147,7 @@ def solve(data, **kwargs):
     }
     for key, val in kwargs.items():
         if key not in default_parameters.keys():
-            raise Exception("The input keyworded argument do no exists")
+            raise Exception("The input keyworded argument do not exists")
         default_parameters[key] = val
     params = default_parameters
     # Set the parameters

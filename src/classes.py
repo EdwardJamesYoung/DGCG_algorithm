@@ -15,22 +15,23 @@ from . import operators as op
 
 # Module methods
 
+#I have gone over this and made the changes I think are necessary to use this program in multiple dimensions
 
 class curve:
     """Piecewise linear continuous curves in the domain Ω.
 
-    To There are two ways to initialize a curve. Either input a single
-    numpy.ndarray of size (M,2), representing a set of M spatial points,
+    There are two ways to initialize a curve. Either input a single
+    numpy.ndarray of size (M,d), representing a set of M spatial points,
     the produced curve will take M uniformly taken time samples.
 
     Alternative, initialize with two arguments, the first one a one dimentional
     ordered list of time samples of size M, and a numpy.ndarray vector of size
-    (M,2) corresponding to the respective spatial points.
+    (M,d) corresponding to the respective spatial points.
 
     Attributes
     ----------
     spatial_points : numpy.ndarray
-        (M,2) sized array with ``M`` the number of time samples. Corresponds to
+        (M,d) sized array with ``M`` the number of time samples. Corresponds to
         the position of the curve at each time sample.
     time_samples : numpy.ndarray
         (M,) sized array corresponding to each time sample.
@@ -75,6 +76,8 @@ class curve:
         return new_curve
 
     def draw(self, tf=1, ax=None, color=[0.0, 0.5, 1.0], plot=True):
+        #This method has yet to be fixed; currently it will only work in 2D.
+        
         """Method to draw the curve.
 
         Using `matplotlib.collections.LineCollection`, this method draws the
@@ -156,14 +159,15 @@ class curve:
         Returns
         -------
         positions : numpy.ndarray
-            (N,2) sized array representing ``N`` different points in ``R^2``.
+            (N,d) sized array representing N different points in (0,1)^d.
             ``N`` corresponds to the number of input times.
         """
         assert t <= 1 and t >= 0
         if isinstance(t, (float, int)):
             t = np.array(t).reshape(1)
         N = len(t)
-        evals = np.zeros((N, 2))
+        d = self.spatial_points.shape[1]
+        evals = np.zeros((N,d))
         for i, tt in enumerate(t):
             if tt == 0:
                 evals[i, :] = self.spatial_points[0, :]
@@ -188,7 +192,7 @@ class curve:
         Returns
         -------
         numpy.ndarray
-            A single spatial point represented by a (1,2) array.
+            A single spatial point represented by a (1,d) array.
         """
         assert checker.is_valid_time(t)
         return self.spatial_points[t:t+1]
@@ -234,11 +238,16 @@ class curve:
         """
         diff_times = self.time_samples[1:]-self.time_samples[:-1]
         x = self.spatial_points
-        x_vals = x[:-1, 0]**2 + x[:-1, 0]*x[1:, 0] + x[1:, 0]**2
-        L2_norm_x = np.sum(diff_times/3*x_vals)
-        y_vals = x[:-1, 1]**2 + x[:-1, 1]*x[1:, 1] + x[1:, 1]**2
-        L2_norm_y = np.sum(diff_times/3*y_vals)
-        return np.sqrt(L2_norm_x + L2_norm_y)
+        #x_vals = x[:-1, 0]**2 + x[:-1, 0]*x[1:, 0] + x[1:, 0]**2
+        #L2_norm_x = np.sum(diff_times/3*x_vals)
+        #y_vals = x[:-1, 1]**2 + x[:-1, 1]*x[1:, 1] + x[1:, 1]**2
+        #L2_norm_y = np.sum(diff_times/3*y_vals)
+
+        vals = x[:-1, :]**2 + x[:-1, :]*x[1:, :] + x[1:, :]**2
+        vals = vals*array([diff_times,]*config.d)/3
+        #return np.sqrt(L2_norm_x + L2_norm_y)
+        return np.sqrt(np.sum(vals))
+
 
     def H1_norm(self):
         """Computes the ``H^1`` norm of this curve.
@@ -555,6 +564,8 @@ class measure:
             return self._main_energy
 
     def draw(self, ax=None):
+        #This is also almost guarenteed not to work in multiple dimensions (until I fix it)
+        
         """Draws the measure.
 
         Parameters
@@ -668,7 +679,7 @@ class dual_variable:
             Time sample index, takes values in 0,1,...,T. With (T+1) the total
             number of time samples of the inverse problem.
         x : numpy.ndarray
-        (N,2) sized array representing ``N`` spatial points of the domain Ω.
+        (N,d) sized array representing ``N`` spatial points of the domain Ω.
 
         Returns
         -------
@@ -688,12 +699,12 @@ class dual_variable:
             Time sample index, takes values in 0,1,...,T. With (T+1) the total
             number of time samples of the inverse problem.
         x : numpy.ndarray
-        (N,2) sized array representing ``N`` spatial points of the domain Ω.
+        (N,d) sized array representing ``N`` spatial points of the domain Ω.
 
         Returns
         -------
         numpy.ndarray
-            (2,N,1) sized array, corresponding to the evaluations in the N
+            (d,N,1) sized array, corresponding to the evaluations in the N
             given points at a fixed time, and the first coordinate indicating
             the partial derivatives.
         """
@@ -748,7 +759,7 @@ class dual_variable:
     def grid_evaluate(self, t, resolution=0.01):
         """Evaluates the dual variable in a spatial grid for a fixed time.
 
-        The grid is uniform in [0,1]x[0,1]
+        The grid is uniform in [0,1]^d
 
         Parameters
         ----------
@@ -765,11 +776,22 @@ class dual_variable:
         maximum_at_t : float
             Maximum value of the dual variable in this grid at time t.
         """
+
+        """
+        OLD CODE
         x = np.linspace(0, 1, round(1/resolution))
         y = np.linspace(0, 1, round(1/resolution))
         X, Y = np.meshgrid(x, y)
         XY = np.array([np.array([xx, yy]) for yy, xx in it.product(y, x)])
         evaluations = self.eval(t, XY).reshape(X.shape)
+        maximum_at_t = np.max(evaluations)
+        self._maximums[t] = maximum_at_t
+        return evaluations, maximum_at_t
+        """
+
+        #NEW CODE (FOR MULTIPLE DIMENSIONS)
+        coords = np.meshgrid(*[np.linspace(0,1,round(1/resolution)) for ii in range(config.d)])
+        evaluations = self.eval(t, np.stack([axi.flatten() for axi in coords]).T).reshape(coords[0].shape)
         maximum_at_t = np.max(evaluations)
         self._maximums[t] = maximum_at_t
         return evaluations, maximum_at_t

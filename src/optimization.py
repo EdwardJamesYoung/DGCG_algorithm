@@ -70,9 +70,9 @@ def grad_F(curve, w_t):
     L_gamma = curve.energy()
     W_gamma = -curve.integrate_against(w_t)
     # ∇L(γ) computation
-    diff_positions = np.diff(curve.spatial_points, axis=0)  # γ_{i+1}-γ_{i} (T-1)x2 array
+    diff_positions = np.diff(curve.spatial_points, axis=0)  # γ_{i+1}-γ_{i} (T-1)xd array
     diff_times = np.diff(config.time)   # t_{i+1}-t{i} 1D array
-    diffs = np.diag(1/diff_times)@diff_positions  # diff(γ)/diff(t) (T-1)x2 array
+    diffs = np.diag(1/diff_times)@diff_positions  # diff(γ)/diff(t) (T-1)xd array
     prepend_zero_diffs = np.insert(diffs, 0, 0, axis=0)
     append_zero_diffs = np.insert(diffs, len(diffs), 0, axis=0)
     grad_L_gamma = config.beta*(prepend_zero_diffs - append_zero_diffs)

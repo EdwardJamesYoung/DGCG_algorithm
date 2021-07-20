@@ -226,7 +226,7 @@ def random_insertion(w_t):
     For further information, check the paper that defined this code.
     """
     logger = config.logger
-    min_segments = 1
+    min_segments = max(config.insertion_min_segments,1)
     max_segments = min(config.T-1, config.insertion_max_segments)
 
     def sample_random_curve(w_t):

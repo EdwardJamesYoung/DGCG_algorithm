@@ -98,15 +98,36 @@ int.
 Maximum number of iterations of the algorithm.
 """
 
+time_limit = False
+"""
+Boolean.
+When this is set to False, the algorithm runs until a solution is found,
+or until it reaches the maximum number of iterations full_max_iterations.
+When this is set to True, the algorithm will terminate if it is allowed 
+to run for longer than full_max_time
+"""
+
+full_max_time = 14400
+"""
+float.
+When time_limit = True, the algorithm will stop running after full_max_time
+seconds. By default, this stops the algorithm after 4 hours.
+"""
+
 # Random insertion of curves parameters
 insertion_max_segments = 20
+insertion_min_segments = 1
 """
 int.
+int.
 In the insertion step, during the multistart gradient descent, random
-curves are proposed for descense in insertion_mod.random_insertion
-The number of segments of the random curves is chosen at random, with
-this parameter defining the upper limit on the chosen segments.
+curves are proposed for descent in insertion_mod.random_insertion
+The number of segments of the random curves is chosen uniformly at 
+random, with these parameters defining the (inclusive) upper and lower
+limits on the number of segments.
 """
+
+
 rejection_sampling_epsilon = 0.05
 """
 float.

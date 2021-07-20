@@ -2,6 +2,7 @@
 """
 # Standard imports
 import numpy as np
+import time
 import os
 
 # Local imports
@@ -188,6 +189,9 @@ def solve(data, **kwargs):
             current_measure = default_parameters['initial_measure']
             _ = current_measure.get_main_energy()
 
+    #The main loop of the algorithm
+    start_time = time.time()
+
     for num_iter in range(1, config.full_max_iterations):
         logger.status([1], num_iter, current_measure)
         current_measure, flag = insertion_step.insertion_step(current_measure)
@@ -196,9 +200,13 @@ def solve(data, **kwargs):
             print("Finished execution")
             return current_measure, (1, 'SUCCESS')
         current_measure = optimization.slide_and_optimize(current_measure)
+        if config.time_limit and time.time() - start_time >= config.full_max_time:
+            print("Time limit ({} seconds) reached!".format(config.full_max_time))
+            return current_measure, (0, 'FAILURE: unable to reach a solution in required time.')    
+            
     print("Maximum number of iterations ({}) reached!".format(
                                                 config.full_max_iterations))
-    return current_measure, (0, 'FAILURE: unable to reach a solution')
+    return current_measure, (0, 'FAILURE: unable to reach a solution within the maximum number of iterations')
 
 
 if __name__ == ' __main__':

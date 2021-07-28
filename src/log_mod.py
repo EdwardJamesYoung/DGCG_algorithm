@@ -76,7 +76,7 @@ class logger:
                 subsubtext = steptext[np.mod(sect[0], 2)]
                 text_file = '{}/iter_{:03d}_{}'.format(temp, num_iter,subsubtext)
                 print("The name of the animation should be " + text_file + ".mp4")
-                current_measure.animate(filename=text_file, show=True)
+                current_measure.animate(filename=text_file+"_animation", show=True)
                 _ = current_measure.draw()
                 plt.title('Current solution')
                 plt.savefig(text_file+'.pdf')

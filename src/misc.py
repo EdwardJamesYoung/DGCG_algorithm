@@ -132,7 +132,7 @@ class Animate(object):
         self.start()
         if self.filename is not None and config.use_ffmpeg is True:
             Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=1800)
+            writer = Writer(fps=24, metadata=dict(artist='Me'), bitrate=3600)
             self.anim.save(self.filename + '.mp4', writer=writer, dpi=200)
         plt.show(block=self.block)
         if not self.show:

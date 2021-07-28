@@ -362,7 +362,7 @@ class curve_product:
         return output
 
     def to_measure(self):
-        """Cast this objet into :py:class:`src.classes.measure` """
+        """Cast this object into :py:class:`src.classes.measure` """
         new_measure = measure()
         for weight, curve in zip(self.weights, self.curve_list):
             new_measure.add(curve, weight)
@@ -601,13 +601,14 @@ class measure:
             Switch to indicate if the animation should be immediately shown.
             Default True.
         frames : int, optional
-            Number of frames considered in the animation. Default 51.
+            Number of frames considered in the animation. Default config.T.
 
         Returns
         -------
         None
         """
-        animation = misc.Animate(self, frames=51, filename=filename, show=show)
+        animation = misc.Animate(self, frames=config.T, filename=filename, show=show)
+        animation.start()
         animation.draw()
 
     def reorder(self):

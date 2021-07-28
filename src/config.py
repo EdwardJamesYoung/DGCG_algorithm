@@ -100,7 +100,7 @@ Maximum number of iterations of the algorithm.
 
 time_limit = False
 """
-Boolean.
+Bool.
 When this is set to False, the algorithm runs until a solution is found,
 or until it reaches the maximum number of iterations full_max_iterations.
 When this is set to True, the algorithm will terminate if it is allowed 

@@ -6,6 +6,7 @@ parser.add_argument('index', type = int)
 args = parser.parse_args()
 
 index = args.index
+print("Job index is: {}.".format(index))
 
 #-----------------------------
 
@@ -26,11 +27,12 @@ import os
 sys.path.insert(0, os.path.abspath('..'))
 from src import DGCG
 from light_microscopy_simulations import Gaussian_kernel
+print('Imports went successfully.')
 
 Res = 101
-sigma = 0.01
+sigma = 0.02
 T = 51
-TIMESAMPLES = np.linespace(0,1,T)
+TIMESAMPLES = np.linspace(0,1,T)
 
 #-----------------------------
 
@@ -43,16 +45,21 @@ c2 = DGCG.classes.curve(pos2)
 c3 = DGCG.classes.curve(pos3)
 
 measure = DGCG.classes.measure()
-measure.add(c1, 0.1*c1.energy())
-measure.add(c2, 0.1*c1.energy())
-measure.add(c3, 0.2*c1.energy())
+measure.add(c1, 0.05*c1.energy())
+measure.add(c2, 0.05*c1.energy())
+measure.add(c3, 0.1*c1.energy())
+
+print("Measure initialised.")
 
 #-----------------------------
 
 if __name__ == "__main__":
 
+    print("Main routine started.")
     kernel = Gaussian_kernel.GaussianKernel(Res,sigma)    
+    print("Kernel initialised.")
     DGCG.set_model_parameters(*algorithm_args[:2],TIMESAMPLES, np.ones(T,dtype=int)*(Res**2), kernel.eval, kernel.grad)
+    print("Model initilised.")
 
     #-----------------------------
     
@@ -63,6 +70,7 @@ if __name__ == "__main__":
     noise = noise*algorithm_args[2]*np.sqrt(DGCG.operators.int_time_H_t_product(data,data))
 
     noisy_data = data + noise
+    print("Noisy data obtained.")
 
     #-----------------------------
 
@@ -75,8 +83,9 @@ if __name__ == "__main__":
         "insertion_max_segments": 40,
         "TOL": 10**(-8)
     }
-
+	
     DGCG.config.time_limit = True
+    DGCG.config.multistart_proposition_max_iter = 10000
     DGCG.full_max_time = 72000
 
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)

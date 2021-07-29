@@ -429,6 +429,10 @@ class measure:
                                        new_curve.energy())
             self.weights = np.append(self.weights, new_weight)
             self._main_energy = None
+        else:
+            print("Measure coefficient too low!")
+            print("Weight: {:e}".format(new_weight))
+            print("Threshold: {:e}".fomrat(config.measure_coefficient_too_low))
 
     def __add__(self, measure2):
         new_measure = copy.deepcopy(self)

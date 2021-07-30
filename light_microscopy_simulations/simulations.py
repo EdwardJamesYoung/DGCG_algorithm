@@ -1,3 +1,4 @@
+print("Simulation script started running.")
 import argparse
 print("Imported argparse.")
 

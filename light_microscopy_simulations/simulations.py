@@ -1,4 +1,5 @@
 import argparse
+print("Imported argparse.")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('index', type = int)
@@ -12,6 +13,7 @@ print("Job index is: {}.".format(index))
 
 import numpy as np
 import itertools
+print("Imported numpy and itertools.")
 
 noise_levels = np.array([0,0.3,0.6,1.2,2.4])
 trade_off = np.array([0.2,0.5,0.8])
@@ -27,10 +29,10 @@ import os
 sys.path.insert(0, os.path.abspath('..'))
 from src import DGCG
 from light_microscopy_simulations import Gaussian_kernel
-print('Imports went successfully.')
+print('Imported DGCG and Gaussian_kernel.')
 
 Res = 101
-sigma = 0.02
+sigma = 0.05
 T = 51
 TIMESAMPLES = np.linspace(0,1,T)
 
@@ -85,9 +87,10 @@ if __name__ == "__main__":
     }
 	
     DGCG.config.time_limit = True
-    DGCG.config.multistart_proposition_max_iter = 10000
+    DGCG.config.multistart_proposition_max_iter = 100000
     DGCG.full_max_time = 72000
 
+    print("Solve about to start.")
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)
 
     #------------------------------
@@ -95,6 +98,6 @@ if __name__ == "__main__":
     recovered_data = DGCG.operators.K_t_star_full(solution_measure)
     diff = recovered_data - data
 
-    error = DGCG.operators.int_time_H_t_product(diff,diff)
+    er = DGCG.operators.int_time_H_t_product(diff,diff)
     print("Data error of the recovered solution:")
-    print(error)
+    print(er)

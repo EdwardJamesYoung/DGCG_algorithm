@@ -14,13 +14,23 @@ print("Job index is: {}.".format(index))
 
 import numpy as np
 import itertools
-print("Imported numpy and itertools.")
+from time import localtime, strftime
+print("Imported numpy, itertools, and time")
 
+"""
 noise_levels = np.array([0,0.3,0.6,1.2,2.4])
 trade_off = np.array([0.2,0.5,0.8])
 weight = np.array([0.2,0.6,1.2])
 
 algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index]
+"""
+
+noise_levels = np.array([0,0.2])
+trade_off = np.array([0.5])
+weight = np.array([0.2,0.4])
+
+algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index]
+print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
 
 #-----------------------------
 
@@ -33,7 +43,7 @@ from light_microscopy_simulations import Gaussian_kernel
 print('Imported DGCG and Gaussian_kernel.')
 
 Res = 101
-sigma = 0.05
+sigma = 0.02
 T = 51
 TIMESAMPLES = np.linspace(0,1,T)
 
@@ -48,9 +58,9 @@ c2 = DGCG.classes.curve(pos2)
 c3 = DGCG.classes.curve(pos3)
 
 measure = DGCG.classes.measure()
-measure.add(c1, 0.05*c1.energy())
-measure.add(c2, 0.05*c1.energy())
-measure.add(c3, 0.1*c1.energy())
+measure.add(c1, 1*c1.energy())
+measure.add(c2, 1*c1.energy())
+measure.add(c3, 2*c1.energy())
 
 print("Measure initialised.")
 
@@ -80,7 +90,7 @@ if __name__ == "__main__":
     simulation_parameters = {
         "insertion_max_restarts": 30,
         "insertion_min_restarts": 10,
-        "results_folder": "a={:.2f},b={:.2f},n={:.1f}".format(*algorithm_args), 
+        "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         "multistart_pooling_num": 5000,
         "insertion_min_segments": 15,
         "insertion_max_segments": 40,
@@ -89,7 +99,7 @@ if __name__ == "__main__":
 	
     DGCG.config.time_limit = True
     DGCG.config.multistart_proposition_max_iter = 100000
-    DGCG.full_max_time = 72000
+    DGCG.config.full_max_time = 72000
 
     print("Solve about to start.")
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)

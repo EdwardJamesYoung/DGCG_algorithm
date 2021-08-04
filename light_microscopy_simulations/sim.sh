@@ -1,12 +1,12 @@
 # Define array
-#$ -t 15-15
+#$ -t 1-4
 # Define working directory
 #$ -cwd
 # Input and output are the same
 #$ -o outputlog
 #$ -j y
 # Request some node
-#$ -l dedicated=24
+#$ -l dedicated=10
 
 echo "Task id is $SGE_TASK_ID"
 

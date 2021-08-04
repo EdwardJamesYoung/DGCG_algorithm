@@ -29,7 +29,7 @@ noise_levels = np.array([0,0.2])
 trade_off = np.array([0.5])
 weight = np.array([0.2,0.4])
 
-algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index]
+algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index-1]
 print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
 
 #-----------------------------

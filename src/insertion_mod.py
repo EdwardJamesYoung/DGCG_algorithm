@@ -247,12 +247,9 @@ def random_insertion(w_t):
         for t in considered_times[1:]:
             positions = np.append(positions, rejection_sampling(t, w_t), 0)
         rand_curve = classes.curve(considered_times/(config.T - 1), positions)
-        # discarding any proposed curve that has too much length
-        if w_t.get_sum_maxs()*config.insertion_length_bound_factor < rand_curve.energy():
-            logger.status([1, 1, 1, 2], considered_times)
-            return sample_random_curve(w_t)
-        else:
-            return rand_curve
+        return rand_curve
+        
+
     tentative_random_curves = []
     tentative_random_curves_energy = []
     pool_number = config.multistart_pooling_num
@@ -260,10 +257,17 @@ def random_insertion(w_t):
         # Define the energy here to evaluate the crossover children
         return -curve.integrate_against(w_t)/curve.energy()
     for i in range(pool_number):
+
         rand_curve = sample_random_curve(w_t)
+
+        # Discarding any proposed curve that has too much length        
+        while w_t.get_sum_maxs()*config.insertion_length_bound_factor < rand_curve.energy():
+            logger.status([1, 1, 1, 2], considered_times)
+            rand_curve = sample_random_curve(w_t)
+
         tentative_random_curves.append(rand_curve)
         tentative_random_curves_energy.append(F(rand_curve))
-    # select the one with the best energy
+    # Select the one with the best energy
     idx_best = np.argmin(tentative_random_curves_energy)
     return_curve = tentative_random_curves[idx_best]
     return_energy = tentative_random_curves_energy[idx_best]

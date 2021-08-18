@@ -124,10 +124,10 @@ class logger:
             self.printing(text)
         if sect == [1, 1, 1, 2]:
             # [1,1,1,2]
-            considered_times = args[0]
+            node_num = args[0]
             text_struct = '* * * * * Discarded random curve insertion with' + \
                           ' {:02d} nodes'
-            text = text_struct.format(len(considered_times))
+            text = text_struct.format(node_num)
             self.printing(text)
         if sect == [1, 1, 2]:
             # [1,1,2]

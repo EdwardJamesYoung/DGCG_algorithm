@@ -262,7 +262,7 @@ def random_insertion(w_t):
 
         # Discarding any proposed curve that has too much length        
         while w_t.get_sum_maxs()*config.insertion_length_bound_factor < rand_curve.energy():
-            logger.status([1, 1, 1, 2], considered_times)
+            logger.status([1, 1, 1, 2], rand_curve.spatial_points.shape[0])
             rand_curve = sample_random_curve(w_t)
 
         tentative_random_curves.append(rand_curve)

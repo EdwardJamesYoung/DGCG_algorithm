@@ -247,7 +247,7 @@ def random_insertion(w_t):
         for t in considered_times[1:]:
             positions = np.append(positions, rejection_sampling(t, w_t), 0)
         rand_curve = classes.curve(considered_times/(config.T - 1), positions)
-        return rand_curve
+        return rand_curve, len(considered_times)
         
 
     tentative_random_curves = []
@@ -258,12 +258,12 @@ def random_insertion(w_t):
         return -curve.integrate_against(w_t)/curve.energy()
     for i in range(pool_number):
 
-        rand_curve = sample_random_curve(w_t)
+        rand_curve, node_num = sample_random_curve(w_t)
 
         # Discarding any proposed curve that has too much length        
         while w_t.get_sum_maxs()*config.insertion_length_bound_factor < rand_curve.energy():
-            logger.status([1, 1, 1, 2], rand_curve.spatial_points.shape[0])
-            rand_curve = sample_random_curve(w_t)
+            logger.status([1, 1, 1, 2], node_num)
+            rand_curve, node_num = sample_random_curve(w_t)
 
         tentative_random_curves.append(rand_curve)
         tentative_random_curves_energy.append(F(rand_curve))

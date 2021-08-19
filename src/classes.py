@@ -803,7 +803,7 @@ class dual_variable:
         if self._maximums[t] == np.nan:
             _, maximum_at_t = self.grid_evaluate(t)
         else:
-            maximum_at_t = self.maximums[t]
+            maximum_at_t = self._maximums[t]
         # To consider this function as a density we apply the same
         # transformation at all times, for x a np.array, this is
         epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t

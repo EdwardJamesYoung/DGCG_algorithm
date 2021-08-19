@@ -800,7 +800,7 @@ class dual_variable:
     def _density_transformation(self, t, x):
         """The function that is applied to use the dual variable as density.
         """
-        if self._maximums[t] == np.nan:
+        if np.isnan(self._maximums[t]):
             _, maximum_at_t = self.grid_evaluate(t)
         else:
             maximum_at_t = self._maximums[t]

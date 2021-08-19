@@ -125,9 +125,10 @@ class logger:
         if sect == [1, 1, 1, 2]:
             # [1,1,1,2]
             node_num = args[0]
+            jj = args[1]
             text_struct = '* * * * * Discarded random curve insertion with' + \
-                          ' {:02d} nodes'
-            text = text_struct.format(node_num)
+                          ' {:02d} nodes. This is the {:05d} failed sampling attempt.'
+            text = text_struct.format(node_num,jj)
             self.printing(text)
         if sect == [1, 1, 2]:
             # [1,1,2]

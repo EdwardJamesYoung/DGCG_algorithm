@@ -259,10 +259,12 @@ def random_insertion(w_t):
     for i in range(pool_number):
 
         rand_curve, node_num = sample_random_curve(w_t)
+        jj = 0
 
         # Discarding any proposed curve that has too much length        
         while w_t.get_sum_maxs()*config.insertion_length_bound_factor < rand_curve.energy():
-            logger.status([1, 1, 1, 2], node_num)
+            jj = jj + 1
+            logger.status([1, 1, 1, 2], node_num, jj)
             rand_curve, node_num = sample_random_curve(w_t)
 
         tentative_random_curves.append(rand_curve)
@@ -295,11 +297,11 @@ def rejection_sampling(t, w_t):
     # that no endpoint of a curve would lie. 
     support, density_max = w_t.as_density_get_params(t)
     M = support*density_max
-    iter_reasonable_threshold = 10000
+    iter_reasonable_threshold = 1000
     iter_index = 0
     while iter_index < iter_reasonable_threshold:
         # sample from uniform distribution on the support of w_t as density.
-        reasonable_threshold = 10000
+        reasonable_threshold = 1000
         i = 0
         while i < reasonable_threshold:
             x = np.random.rand()

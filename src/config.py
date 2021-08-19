@@ -139,7 +139,7 @@ In principle, the higher is this number, the faster the rejection sampling
 algorithm will find a candidate. But simultaneously, it will miss possible
 candidates that have values barely above 0.
 """
-insertion_length_bound_factor = 1.1
+insertion_length_bound_factor = 1.2
 """
 float.
 When proposing curves to descend in insertion_mod.propose, it is known

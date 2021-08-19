@@ -305,8 +305,8 @@ def rejection_sampling(t, w_t):
             x = np.random.rand()
             y = np.random.rand()
             sample = np.array([[x, y]])
-            y = w_t.as_density_eval(t, sample)
-            if y > 0:
+            h = w_t.as_density_eval(t, sample)
+            if h > 0:
                 break
             else:
                 i = i + 1
@@ -314,7 +314,7 @@ def rejection_sampling(t, w_t):
             sys.exit('It is not able to sample inside the support of w_t')
         # sample rejection sampling
         u = np.random.rand()
-        if u < y/M*support:
+        if u < h/density_max:
             # accept
             return sample
         else:

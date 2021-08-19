@@ -27,7 +27,7 @@ algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(tra
 
 noise_levels = np.array([0,0.2])
 trade_off = np.array([0.5])
-weight = np.array([0.2,0.4])
+weight = np.array([0.1,0.2])
 
 algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index-1]
 print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
@@ -43,7 +43,7 @@ from light_microscopy_simulations import Gaussian_kernel
 print('Imported DGCG and Gaussian_kernel.')
 
 Res = 101
-sigma = 0.02
+sigma = 0.04
 T = 51
 TIMESAMPLES = np.linspace(0,1,T)
 
@@ -91,9 +91,9 @@ if __name__ == "__main__":
         "insertion_max_restarts": 30,
         "insertion_min_restarts": 10,
         "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": 5000,
-        "insertion_min_segments": 15,
-        "insertion_max_segments": 40,
+        "multistart_pooling_num": 1000,
+        "insertion_min_segments": 5,
+        "insertion_max_segments": 20,
         "TOL": 10**(-8)
     }
 	

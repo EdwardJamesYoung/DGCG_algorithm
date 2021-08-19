@@ -127,7 +127,6 @@ random, with these parameters defining the (inclusive) upper and lower
 limits on the number of segments.
 """
 
-
 rejection_sampling_epsilon = 0.05
 """
 float.
@@ -139,6 +138,12 @@ In principle, the higher is this number, the faster the rejection sampling
 algorithm will find a candidate. But simultaneously, it will miss possible
 candidates that have values barely above 0.
 """
+
+rejection_sampling_epsilon_coeff = 0.05
+"""
+float.
+"""
+
 insertion_length_bound_factor = 1.2
 """
 float.

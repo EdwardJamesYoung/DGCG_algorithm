@@ -797,12 +797,16 @@ class dual_variable:
                                     t in range(config.T)])
         return self._sum_maxs
 
-    def _density_transformation(self, x):
+    def _density_transformation(self, t, x):
         """The function that is applied to use the dual variable as density.
         """
+        if self._maximums[t] == np.nan:
+            _, maximum_at_t = self.grid_evaluate(t)
+        else:
+            maximum_at_t = self.maximums[t]
         # To consider this function as a density we apply the same
         # transformation at all times, for x a np.array, this is
-        epsi = config.rejection_sampling_epsilon
+        epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
         # it has to be an increasing function, that kills any value below -epsi
         return np.exp(np.maximum(x + epsi, 0))-1
 
@@ -829,16 +833,16 @@ class dual_variable:
         if np.isnan(self._as_predensity_mass[t]):
             # Produce, and store, the parameters needed to define a density
             # with the dual variable. These parameters change for each time t.
-            evaluations, _ = self.grid_evaluate(t)
+            evaluations, maximum_at_t = self.grid_evaluate(t)
             # extracting the epsilon support for rejection sampling
             # # eps_sup = #{x_i : w_n^t(x_i) > -ε}
-            epsi = config.rejection_sampling_epsilon
+            epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
             eps_sup = np.sum(evaluations > -epsi)
             # # density_support: #eps_sup / #{x_i in evaluations}
             # # i.e. the proportion of the support that evaluates above -ε
             self._density_support[t] = eps_sup/np.size(evaluations)
             # The integral of the distribution
-            pre_density_eval = self._density_transformation(evaluations)
+            pre_density_eval = self._density_transformation(t, evaluations)
             mass = np.sum(pre_density_eval)*0.01**2
             self._as_predensity_mass[t] = mass
             self._density_max[t] = np.max(pre_density_eval)/mass
@@ -866,7 +870,7 @@ class dual_variable:
         # file.  It interally stores the computed values, for later use.
         # Input: t ∈ {0,1,..., T-1}, x ∈ Ω numpy array.
         mass = self._as_predensity_mass[t]
-        return self._density_transformation(self.eval(t, x))/mass
+        return self._density_transformation(t, self.eval(t, x))/mass
 
 
 if __name__ == '__main__':

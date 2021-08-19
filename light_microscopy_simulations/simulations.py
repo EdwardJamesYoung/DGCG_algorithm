@@ -93,7 +93,7 @@ if __name__ == "__main__":
         "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         "multistart_pooling_num": 1000,
         "insertion_min_segments": 5,
-        "insertion_max_segments": 20,
+        "insertion_max_segments": 40,
         "TOL": 10**(-8)
     }
 	

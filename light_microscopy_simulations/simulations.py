@@ -43,7 +43,7 @@ from light_microscopy_simulations import Gaussian_kernel
 print('Imported DGCG and Gaussian_kernel.')
 
 Res = 101
-sigma = 0.04
+sigma = 0.02
 T = 51
 TIMESAMPLES = np.linspace(0,1,T)
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         "insertion_min_restarts": 10,
         "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         "multistart_pooling_num": 500,
-        "insertion_min_segments": 1,
+        "insertion_min_segments": 5,
         "insertion_max_segments": 30,
         "TOL": 10**(-8)
     }

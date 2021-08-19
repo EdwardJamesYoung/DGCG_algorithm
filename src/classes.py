@@ -806,9 +806,12 @@ class dual_variable:
             maximum_at_t = self._maximums[t]
         # To consider this function as a density we apply the same
         # transformation at all times, for x a np.array, this is
-        epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
+        
+        # epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
+        epsi = config.rejection_sampling_epsilon
+
         # it has to be an increasing function, that kills any value below -epsi
-        return np.exp(np.maximum(x + epsi, 0))-1
+        return np.exp(np.maximum(x/maximum_at_t + epsi, 0))-1
 
     def as_density_get_params(self, t):
         """Return the parameters to use the dual variable as density.
@@ -836,8 +839,12 @@ class dual_variable:
             evaluations, maximum_at_t = self.grid_evaluate(t)
             # extracting the epsilon support for rejection sampling
             # # eps_sup = #{x_i : w_n^t(x_i) > -ε}
-            epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
-            eps_sup = np.sum(evaluations > -epsi)
+            
+            #epsi = config.rejection_sampling_epsilon_coeff*maximum_at_t
+            epsi = config.rejection_sampling_epsilon
+
+
+            eps_sup = np.sum(evaluations/maximum_at_t > -epsi)
             # # density_support: #eps_sup / #{x_i in evaluations}
             # # i.e. the proportion of the support that evaluates above -ε
             self._density_support[t] = eps_sup/np.size(evaluations)

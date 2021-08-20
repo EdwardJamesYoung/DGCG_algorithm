@@ -25,9 +25,9 @@ weight = np.array([0.2,0.6,1.2])
 algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index]
 """
 
-noise_levels = np.array([0,0.2])
+noise_levels = np.array([0])
 trade_off = np.array([0.5])
-weight = np.array([0.1,0.2])
+weight = np.array([0.04,0.08,0.12,0.16,0.20,0.24,0.28,0.32,0.36,0.40])
 
 algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index-1]
 print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         "insertion_max_restarts": 30,
         "insertion_min_restarts": 10,
         "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": 500,
+        "multistart_pooling_num": 1000,
         "insertion_min_segments": 5,
         "insertion_max_segments": 30,
         "TOL": 10**(-8)
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 	
     DGCG.config.time_limit = True
     DGCG.config.multistart_proposition_max_iter = 100000
-    DGCG.config.full_max_time = 72000
+    DGCG.config.full_max_time = 720000
 
     print("Solve about to start.")
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)

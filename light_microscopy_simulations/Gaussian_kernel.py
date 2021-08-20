@@ -36,7 +36,7 @@ class GaussianKernel:
         numpy.ndarray of size (N, Res^2) - the Gaussian function shifted to being
             centered at each of the grid points 
         """
-        return 6*np.stack([self.gauss2d(self.grid,x[k,:]) for k in range(x.shape[0])])/self.Resolution
+        return 10*np.stack([self.gauss2d(self.grid,x[k,:]) for k in range(x.shape[0])])/self.Resolution
 
 
     def grad(self,t,x): 

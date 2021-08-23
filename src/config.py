@@ -346,7 +346,7 @@ absolute errors.
 slide_opt_max_iter = 100000
 """
 int.
-During the sliding step, this parameter modules the maximum number of
+During the sliding step, this parameter controls the maximum number of
 iterations to execute.
 """
 slide_opt_in_between_iters = 100

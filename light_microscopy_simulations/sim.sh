@@ -1,5 +1,5 @@
 # Define array
-#$ -t 1-10
+#$ -t 1-5
 # Define working directory
 #$ -cwd
 # Input and output are the same

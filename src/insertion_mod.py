@@ -148,7 +148,7 @@ def propose(w_t, stationary_curves, energy_curves):
     There are three types of proposed curves to insert:
         1. The already known curves from the current solution.
         2. Random curves placed by selecting random times and random locations.
-        3. Crossover curves, these are obtained by merging two good descended.
+        3. Crossover curves, these are obtained by merging two good descended 
         candidates.
 
     Parameters

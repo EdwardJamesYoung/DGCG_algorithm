@@ -174,7 +174,7 @@ def multistart_descent(current_measure):
                     if max_discarded_counter >= max_discarded_tries:
                         print("""WARNING: Most of the proposed curves are
                               converging faster than the first checkout, making
-                              them not count towards the numbe of tries and
+                              them not count towards the number of tries and
                               potentially leading towards an infinite loop.
                               Please reconsider decreasing the value of
                               config.multistart_inter_interation_checkup

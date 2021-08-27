@@ -231,10 +231,9 @@ def random_insertion(w_t):
         # Define the energy here to evaluate the crossover children
         return -curve.integrate_against(w_t)/curve.energy()
     
-    
+    """
     min_segments = max(config.insertion_min_segments,1)
     max_segments = min(config.T-1, config.insertion_max_segments)
-
     def sample_random_curve(w_t):
         num_segments = np.random.randint(max_segments-min_segments+1)\
                                         + min_segments
@@ -298,7 +297,6 @@ def random_insertion(w_t):
         rand_curve = intermediate_pooling_curves[idx]
 
         return rand_curve, len(considered_times)    
-    """
 
     tentative_random_curves = []
     tentative_random_curves_energy = []

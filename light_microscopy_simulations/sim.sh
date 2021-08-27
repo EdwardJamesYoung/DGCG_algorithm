@@ -13,4 +13,4 @@ echo "Task id is $SGE_TASK_ID"
 conda activate dgcg
 echo "dgcg environment activated"
 
-python simulations.py $SGE_TASK_ID > sparse.$SGE_TASK_ID
+python simulations.py $SGE_TASK_ID > interpolate.$SGE_TASK_ID

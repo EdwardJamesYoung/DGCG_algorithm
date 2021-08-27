@@ -664,6 +664,7 @@ class dual_variable:
         self._density_max = [np.nan for t in range(config.T)]
         # the following member is for the rejection sampling algorithm
         self._size_epsilon_support = [np.nan for t in range(config.T)]
+        
     def eval(self, t, x):
         """Evaluate the dual variable in a time and space
 

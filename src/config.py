@@ -139,10 +139,13 @@ algorithm will find a candidate. But simultaneously, it will miss possible
 candidates that have values barely above 0.
 """
 
-rejection_sampling_epsilon_coeff = 0.01
+#Modified rejection sampling control parameters
+k = 0.3
 """
 float.
 """
+interpolation_pooling_number = 4
+
 
 insertion_length_bound_factor = 1.2
 """

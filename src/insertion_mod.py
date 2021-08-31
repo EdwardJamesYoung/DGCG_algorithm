@@ -267,7 +267,7 @@ def random_insertion(w_t):
         r = config.interpolation_pooling_number
 
         potential_nodes = np.zeros([n,r,2])
-        interpolation_times = np.empty
+        interpolation_times = np.empty(n)
         
         for ii in range(n):
             t = int(np.round((considered_times[ii+1] + considered_times[ii])/2))

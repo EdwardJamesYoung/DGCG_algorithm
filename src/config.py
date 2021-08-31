@@ -107,11 +107,11 @@ When this is set to True, the algorithm will terminate if it is allowed
 to run for longer than full_max_time
 """
 
-full_max_time = 14400
+full_max_time = 72000
 """
 float.
 When time_limit = True, the algorithm will stop running after full_max_time
-seconds. By default, this stops the algorithm after 4 hours.
+seconds. By default, this stops the algorithm after 20 hours.
 """
 
 # Random insertion of curves parameters
@@ -125,6 +125,18 @@ curves are proposed for descent in insertion_mod.random_insertion
 The number of segments of the random curves is chosen uniformly at 
 random, with these parameters defining the (inclusive) upper and lower
 limits on the number of segments.
+"""
+
+interpolation_sampling = False
+"""
+Bool.
+In the random insertion step to generate a pooling curve, there are
+two ways in which random insertions can be generated. 
+The first way (which occurs when this value is set to False) is to 
+randomly sample a position at each time step, and use that to guide 
+creation of the curve.
+The second way (which occurs if this value is True) is to sample at 
+sparse time points first, and then use those to guide further sampling
 """
 
 rejection_sampling_epsilon = 0.05

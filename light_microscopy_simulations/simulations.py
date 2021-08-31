@@ -112,6 +112,7 @@ if __name__ == "__main__":
     DGCG.config.time_limit = True
     DGCG.config.multistart_proposition_max_iter = 100000
     DGCG.config.full_max_time = 720000
+    DGCG.config.interpolation_sampling = True
 
     print("Solve about to start.")
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)

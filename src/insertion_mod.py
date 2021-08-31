@@ -279,7 +279,7 @@ def random_insertion(w_t):
         
         considered_times = np.sort(np.append(considered_times.astype(int), interpolation_times.astype(int)))
 
-        pos = np.zeros(positions.size + n)
+        pos = np.zeros(positions.size + n, 2)
         pos[0::2,:] = positions
 
         intermediate_pooling_curves = np.empty(r**n)

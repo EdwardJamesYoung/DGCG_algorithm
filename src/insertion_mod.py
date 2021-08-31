@@ -289,7 +289,7 @@ def random_insertion(w_t):
         #There should be r^n curves
         for jj in range(r**n):
             for ll in range(n):
-                pos[2*ll+1,:] = potential_nodes[ll,np.remainder(np.floor(jj/r^ll),r),:]    
+                pos[2*ll+1,:] = potential_nodes[ll,np.remainder(np.floor(jj/(r**ll)),r),:]    
             new_curve =  classes.curve(considered_times/(config.T-1), pos)
             np.append(intermediate_pooling_curves, new_curve)
             np.append(intermediate_energies, F(new_curve))

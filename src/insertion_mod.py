@@ -270,8 +270,8 @@ def random_insertion(w_t):
         interpolation_times = np.empty
         
         for ii in range(n):
-            t = np.round((considered_times[ii+1] + considered_times[ii])/2)
-            np.append(interpolation_times, int(t))
+            t = int(np.round((considered_times[ii+1] + considered_times[ii])/2))
+            np.append(interpolation_times, t)
             x_0 = (positions[ii+1,:] + positions[ii])/2
             M = max_conv_density(t, w_t, x_0)
             for jj in range(r):

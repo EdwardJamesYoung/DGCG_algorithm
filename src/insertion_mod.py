@@ -277,7 +277,7 @@ def random_insertion(w_t):
             for jj in range(r):
                 potential_nodes[ii,jj,:] = modified_rejection_sampling(t, w_t, x_0, M)
         
-        considered_times = np.sort(np.append(considered_times, interpolation_times))
+        considered_times = np.sort(np.append(considered_times.astype(int), interpolation_times.astype(int)))
 
         pos = np.zeros(positions.size + n)
         pos[0::2,:] = positions

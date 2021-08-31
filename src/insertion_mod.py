@@ -262,7 +262,6 @@ def random_insertion(w_t):
         positions = rejection_sampling(0, w_t)
         for t in considered_times[1:]:
             positions = np.append(positions, rejection_sampling(t, w_t), 0)
-        print(positions.shape)
         
         n = len(considered_times) - 1
         r = config.interpolation_pooling_number
@@ -296,6 +295,9 @@ def random_insertion(w_t):
 
         idx = np.argmin(intermediate_energies)
         rand_curve = intermediate_pooling_curves[idx]
+        print(rand_curve)
+        print(intermediate_pooling_curves)
+        assert isinstance(rand_curve, classes.curve)
 
         return rand_curve, len(considered_times)    
 

@@ -282,16 +282,16 @@ def random_insertion(w_t):
         pos = np.zeros(shape = (2*n + 1, 2))
         pos[0::2,:] = positions
 
-        intermediate_pooling_curves = np.empty(r**n)
-        intermediate_energies = np.empty(r**n)
+        intermediate_pooling_curves = []
+        intermediate_energies = []
 
         #There should be r^n curves
         for jj in range(r**n):
             for ll in range(n):
                 pos[2*ll+1,:] = potential_nodes[ll,int(np.remainder(np.floor(jj/(r**ll)),r)),:]    
             new_curve =  classes.curve(considered_times/(config.T-1), pos)
-            np.append(intermediate_pooling_curves, new_curve)
-            np.append(intermediate_energies, F(new_curve))
+            intermediate_pooling_curves.append(new_curve)
+            intermediate_energies.append(F(new_curve))
 
         idx = np.argmin(intermediate_energies)
         rand_curve = intermediate_pooling_curves[idx]

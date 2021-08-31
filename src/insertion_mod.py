@@ -256,7 +256,7 @@ def random_insertion(w_t):
     """
 
     def sample_random_curve(w_t):
-        considered_times = np.linspace(1,config.T,6)
+        considered_times = np.round(np.linspace(1,config.T,6)) - 1
 
         # times
         positions = rejection_sampling(0, w_t)

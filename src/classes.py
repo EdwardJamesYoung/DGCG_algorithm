@@ -682,7 +682,8 @@ class dual_variable:
             (N,1) sized array, corresponding to the evaluations in the N given
             points at a fixed time.
         """
-        assert checker.is_valid_time(t) and checker.is_in_space_domain(x)
+        assert checker.is_valid_time(t)
+        assert checker.is_in_space_domain(x)
         return -op.K_t(t, self._data)(x)
 
     def grad_eval(self, t, x):

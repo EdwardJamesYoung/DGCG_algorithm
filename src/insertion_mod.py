@@ -256,7 +256,7 @@ def random_insertion(w_t):
     """
 
     def sample_random_curve(w_t):
-        considered_times = np.round(np.linspace(1,config.T,6)) - 1
+        considered_times = np.round(np.linspace(1,config.T,6)).astype(int) - 1
 
         # times
         positions = rejection_sampling(0, w_t)
@@ -271,7 +271,7 @@ def random_insertion(w_t):
         
         for ii in range(n):
             t = np.round((considered_times[ii+1] + considered_times[ii])/2)
-            np.append(interpolation_times, t)
+            np.append(interpolation_times, int(t))
             x_0 = (positions[ii+1,:] + positions[ii])/2
             M = max_conv_density(t, w_t, x_0)
             for jj in range(r):

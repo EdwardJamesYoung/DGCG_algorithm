@@ -359,7 +359,7 @@ def gradient_descent(current_measure, init_step,
         return new_measure, stepsize
     # Descent implementation
     new_measure = current_measure
-    # the initial step considered for the algorithm
+    # The initial step considered for the algorithm
     stepsize = init_step
     for iters in range(max_iter):
         new_measure, stepsize = \

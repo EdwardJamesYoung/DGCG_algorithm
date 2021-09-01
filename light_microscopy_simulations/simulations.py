@@ -17,6 +17,7 @@ import itertools
 from time import localtime, strftime
 print("Imported numpy, itertools, and time")
 
+
 """
 noise_levels = np.array([0,0.3,0.6,1.2,2.4])
 trade_off = np.array([0.2,0.5,0.8])
@@ -29,7 +30,7 @@ trade_off = np.array([0.5])
 weight = np.array([0.04,0.08,0.12,0.16,0.20,0.24,0.28,0.32,0.36,0.40])
 
 algorithm_args = np.array([ [(1-l)*w, l*w, n] for l,w,n in itertools.product(trade_off,weight,noise_levels)] )[index-1]
-"""
+
 
 noise_levels = np.array([0])
 alp = np.array([0.2])
@@ -37,6 +38,14 @@ bet = np.array([0.02])
 algorithm_args = np.array([ [a,b,n] for a,b,n in itertools.product(alp,bet,noise_levels)])[index - 1]
 
 print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
+"""
+
+segments = np.array([10,15,20])
+restarts = np.array([50,100,500,1000])
+pooling = np.array([500,1000])
+algorithm_args = np.array([ [s,r,p] for s,r,p in itertools.product(segments,restarts,pooling)])[index - 1]
+
+print("Maximum number of segments = {}, maximum restarts = {}, pooling number = {}".format(*algorithm_args))
 
 #-----------------------------
 
@@ -100,19 +109,20 @@ if __name__ == "__main__":
     #-----------------------------
 
     simulation_parameters = {
-        "insertion_max_restarts": 40,
+        "insertion_max_restarts": algorithm_args[1],
         "insertion_min_restarts": 10,
-        "results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": 100,
+        #"results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
+        "results_folder": "seg={},restarts={},pooling={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
+        "multistart_pooling_num": algorithm_args[2],
         "insertion_min_segments": 1,
-        "insertion_max_segments": 10,
+        "insertion_max_segments": algorithm_args[0],
         "TOL": 10**(-8)
     }
 	
     DGCG.config.time_limit = True
-    DGCG.config.multistart_proposition_max_iter = 100000
-    DGCG.config.full_max_time = 720000
-    DGCG.config.interpolation_sampling = True
+    #DGCG.config.multistart_proposition_max_iter = 100000
+    #DGCG.config.full_max_time = 720000
+    DGCG.config.interpolation_sampling = False
 
     print("Solve about to start.")
     solution_measure = DGCG.solve(noisy_data, **simulation_parameters)

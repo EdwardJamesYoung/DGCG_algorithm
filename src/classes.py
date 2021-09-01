@@ -50,8 +50,10 @@ class curve:
             # case in which time and positions were used
             space = args[1]
             time = args[0]
-            assert checker.is_in_space_domain(space) \
-                   and all(time >= 0) and all(time <= 1)
+            assert checker.is_in_space_domain(space)
+            assert all(time >= 0) 
+            assert all(time <= 1)
+            
             self.time_samples = time
             self.spatial_points = space
             self.set_times(config.time)

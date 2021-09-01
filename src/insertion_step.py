@@ -322,7 +322,7 @@ def gradient_descent(curve, w_t, max_iter=None, init_step=None,
     new_curve = curve
     energy_curve = opt.F(new_curve, w_t)
     assert isinstance(energy_curve, float)
-    # the initial step considered for the algorithm
+    # The initial step considered for the algorithm
     stepsize = init_step
     for i in range(max_iter):
         logger.status([1, 0, 3], i, energy_curve, stepsize)

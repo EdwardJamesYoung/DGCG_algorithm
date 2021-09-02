@@ -107,7 +107,7 @@ When this is set to True, the algorithm will terminate if it is allowed
 to run for longer than full_max_time
 """
 
-full_max_time = 72000
+full_max_time = 720000
 """
 float.
 When time_limit = True, the algorithm will stop running after full_max_time

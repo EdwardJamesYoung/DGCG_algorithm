@@ -92,20 +92,20 @@ if __name__ == "__main__":
     print("Main routine started.")
     kernel = Gaussian_kernel.GaussianKernel(Res,sigma)    
     print("Kernel initialised.")
-    DGCG.set_model_parameters(*algorithm_args[:2],TIMESAMPLES, np.ones(T,dtype=int)*(Res**2), kernel.eval, kernel.grad)
+    DGCG.set_model_parameters(0.2,0.02,TIMESAMPLES, np.ones(T,dtype=int)*(Res**2), kernel.eval, kernel.grad)
     print("Model initilised.")
 
     #-----------------------------
     
     data = DGCG.operators.K_t_star_full(measure)
-
+    """
     noise = np.random.randn(*data.shape)
     noise = noise/np.sqrt(DGCG.operators.int_time_H_t_product(noise,noise))
     noise = noise*algorithm_args[2]*np.sqrt(DGCG.operators.int_time_H_t_product(data,data))
 
     noisy_data = data + noise
     print("Noisy data obtained.")
-
+    """
     #-----------------------------
 
     simulation_parameters = {
@@ -119,13 +119,13 @@ if __name__ == "__main__":
         "TOL": 10**(-8)
     }
 	
-    DGCG.config.time_limit = True
+    DGCG.config.time_limit = False
     #DGCG.config.multistart_proposition_max_iter = 100000
     #DGCG.config.full_max_time = 720000
     DGCG.config.interpolation_sampling = False
 
     print("Solve about to start.")
-    solution_measure = DGCG.solve(noisy_data, **simulation_parameters)
+    solution_measure = DGCG.solve(data, **simulation_parameters)
 
     #------------------------------
 

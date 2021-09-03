@@ -1,5 +1,5 @@
 # Define array
-#$ -t 1-24
+#$ -t 7-7
 # Define working directory
 #$ -cwd
 # Input and output are the same

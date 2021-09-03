@@ -189,8 +189,7 @@ def propose(w_t, stationary_curves, energy_curves):
         # See if it is crossover turn
         if next(cycling_iter) != config.crossover_consecutive_inserts - 1:
             # Attempt to find crossover
-            crossover_curve = find_crossover(stationary_curves, energy_curves,
-                                             w_t)
+            crossover_curve = find_crossover(stationary_curves, energy_curves, w_t)
             if crossover_curve is not None:
                 # If crossover is found, propose it
                 print("Proposing crossover curve")
@@ -369,7 +368,7 @@ def modified_rejection_sampling(t, w_t, x_0):
         reasonable_threshold = 1000
         i = 0
         while i < reasonable_threshold:
-            sample = np.random.normal(x_0, config.k)
+            sample = np.random.normal(x_0, config.k).T
             if sample[0] < 0 or sample[0] > 1 or sample[1] < 0 or sample[1] > 1:
                 i = i + 1
             else:

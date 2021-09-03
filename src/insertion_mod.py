@@ -23,7 +23,7 @@ import sys
 import numpy as np
 
 # Local imports
-from . import classes, config
+from . import classes, config, checker
 
 # Useful class
 class ordered_list_of_lists:
@@ -360,7 +360,7 @@ def modified_rejection_sampling(t, w_t, x_0):
     numpy.ndarray
         A random point in Ω = [0,1]^2.
     """
-    
+    assert checker.is_in_space_domain(x_0)
     iter_reasonable_threshold = 1000
     iter_index = 0
     while iter_index < iter_reasonable_threshold:
@@ -368,7 +368,7 @@ def modified_rejection_sampling(t, w_t, x_0):
         reasonable_threshold = 1000
         i = 0
         while i < reasonable_threshold:
-            sample = np.random.normal(x_0, config.k).T
+            sample = np.array([np.random.normal(x_0, config.k)])
             if sample[0] < 0 or sample[0] > 1 or sample[1] < 0 or sample[1] > 1:
                 i = i + 1
             else:

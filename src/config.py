@@ -156,7 +156,13 @@ k = 0.3
 """
 float.
 """
-interpolation_pooling_number = 4
+sparse_control = 6
+"""
+int.
+"""
+
+#interpolation_pooling_number = 4
+
 
 
 insertion_length_bound_factor = 1.2

@@ -237,6 +237,24 @@ def random_insertion(w_t):
     def sample_random_curve(w_t):
         if config.interpolation_sampling:
             #This samples curves using linear interpolation weighting.
+            n = config.sparse_control
+            considered_times = np.round(np.linspace(1,config.T,n+1)).astype(int) - 1
+            positions = rejection_sampling(0, w_t)
+
+            for t in considered_times[1:]:
+                positions = np.append(positions, rejection_sampling(t, w_t), 0)
+
+            pos = np.zeros(shape = (2*n + 1, 2))
+            pos[0::2,:] = positions
+
+            for ii in range(n):
+                t = int(np.round((considered_times[ii+1] + considered_times[ii])/2))
+                x_0 = (positions[ii+1,:] + positions[ii])/2
+                pos[2*ii+1] = modified_rejection_sampling(t, w_t, x_0)
+
+            return classes.curve(considered_times/(config.T-1), pos), 2*n+1
+            """
+            #This samples curves using linear interpolation weighting.
             considered_times = np.round(np.linspace(1,config.T,6)).astype(int) - 1
             positions = rejection_sampling(0, w_t)
 
@@ -253,9 +271,9 @@ def random_insertion(w_t):
                 t = int(np.round((considered_times[ii+1] + considered_times[ii])/2))
                 np.append(interpolation_times, t)
                 x_0 = (positions[ii+1,:] + positions[ii])/2
-                M = max_conv_density(t, w_t, x_0)
+                #M = max_conv_density(t, w_t, x_0)
                 for jj in range(r):
-                    potential_nodes[ii,jj,:] = modified_rejection_sampling(t, w_t, x_0, M)
+                    potential_nodes[ii,jj,:] = modified_rejection_sampling(t, w_t, x_0)
             
             considered_times = np.sort(np.append(considered_times.astype(int), interpolation_times.astype(int)))
 
@@ -276,6 +294,7 @@ def random_insertion(w_t):
             idx = np.argmin(intermediate_energies)
             rand_curve = intermediate_pooling_curves[idx]
             return rand_curve, len(considered_times)
+            """
         else:
             #This samples curves in the standard manner. 
             num_segments = np.random.randint(max_segments-min_segments+1)\
@@ -322,6 +341,58 @@ def random_insertion(w_t):
     return return_curve
 
 # The following are functions required only for the alternative curve generation system I coded
+
+def modified_rejection_sampling(t, w_t, x_0):
+    """
+    Rejection sampling over a product desnity of the density defined by the dual variable and a Gaussian sampled at x_0
+
+    Parameters
+    ----------
+    t : int
+        Index of time sample. Takes values between 0,1,...,T. Where (T+1) is
+        the total number of time samples of the inverse problem.
+    w_t : :py:class:`src.classes.dual_variable`
+        Dual variable associated with the current iterate.
+    x_0 : numpy.ndarray of shape (1,2)
+        This is the point at which our interpolation is centred
+
+    Returns
+    -------
+    numpy.ndarray
+        A random point in Ω = [0,1]^2.
+    """
+    
+    iter_reasonable_threshold = 1000
+    iter_index = 0
+    while iter_index < iter_reasonable_threshold:
+        # sample from Gaussian distribution on the support of w_t as a density.
+        reasonable_threshold = 1000
+        i = 0
+        while i < reasonable_threshold:
+            sample = np.random.normal(x_0, config.k)
+            if sample[0] < 0 or sample[0] > 1 or sample[1] < 0 or sample[1] > 1:
+                i = i + 1
+            else:
+                h = w_t._density_transformation(t, w_t.eval(t, sample))
+                if h > 0:
+                    break
+                else:
+                    i = i + 1
+        if i == reasonable_threshold:
+            sys.exit('It is not able to sample inside the support of w_t')
+        # sample rejection sampling
+        u = np.random.rand()
+        if u < h/(np.exp(1+config.rejection_sampling_epsilon) - 1):
+            # accept
+            return sample
+        else:
+            # reject
+            iter_index = iter_index+1
+    sys.exit(('The rejection_sampling algorithm failed to find sample in {} ' +
+             'iterations').format(iter_index))
+
+
+"""
 def max_conv_density(t, w_t, x_0, resolution = 0.01):
     k = config.k 
     x = np.linspace(0, 1, round(1/resolution))
@@ -331,8 +402,9 @@ def max_conv_density(t, w_t, x_0, resolution = 0.01):
     evaluations = w_t._density_transformation(t, w_t.eval(t, XY))*np.exp(-( np.square( XY[0,:] - x_0[0] ) + np.square( XY[1,:] - x_0[1] ) )/(2*k*k))
     return np.max(evaluations)
 
+
 def modified_rejection_sampling(t, w_t, x_0, M):
-    """ Rejection sampling over a density defined by the dual variable.
+    Rejection sampling over a density defined by the dual variable.
 
     Parameters
     ----------
@@ -350,7 +422,7 @@ def modified_rejection_sampling(t, w_t, x_0, M):
     -------
     numpy.ndarray
         A random point in Ω = [0,1]^2.
-    """
+    
     iter_reasonable_threshold = 1000
     iter_index = 0
     while iter_index < iter_reasonable_threshold:
@@ -379,6 +451,7 @@ def modified_rejection_sampling(t, w_t, x_0, M):
             iter_index = iter_index+1
     sys.exit(('The rejection_sampling algorithm failed to find sample in {} ' +
              'iterations').format(iter_index))
+"""
 # End the alternative code.
 
 def rejection_sampling(t, w_t):

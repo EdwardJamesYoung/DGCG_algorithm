@@ -38,7 +38,6 @@ bet = np.array([0.02])
 algorithm_args = np.array([ [a,b,n] for a,b,n in itertools.product(alp,bet,noise_levels)])[index - 1]
 
 print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(*algorithm_args))
-"""
 
 segments = np.array([10,15,20])
 restarts = np.array([50,100,500,1000])
@@ -46,6 +45,13 @@ pooling = np.array([500,1000])
 algorithm_args = np.array([ [s,r,p] for s,r,p in itertools.product(segments,restarts,pooling)])[index - 1]
 
 print("Maximum number of segments = {}, maximum restarts = {}, pooling number = {}".format(*algorithm_args))
+"""
+
+interpolation_spread = np.array([0,0.2,0.4,0.8])
+noise_levels = np.array([0,0.2,0.5])
+weight = np.array([2,5])
+
+algorithm_args = np.array([ [k,n,w] for k,n,w in itertools.product(interpolation_spread,noise_levels,weight)])[index - 1]
 
 #-----------------------------
 
@@ -56,6 +62,19 @@ sys.path.insert(0, os.path.abspath('..'))
 from src import DGCG
 from light_microscopy_simulations import Gaussian_kernel
 print('Imported DGCG and Gaussian_kernel.')
+
+if algorithm_args[0] == 0:
+    DGCG.config.interpolation_sampling = False
+    print("Interpolation sampling: OFF. Insertion max segments = 15")
+else:
+    DGCG.config.interpolation_sampling = True
+    print("Interpolation sampling: ON. k = {:.1f}".format(algorithm_args[0]))
+
+alpha = 0.1*algorithm_args[2]
+beta = 0.01*algorithm_args[2]
+n = algorithm_args[1]
+print("alpha = {:.2f}, beta = {:.2f}, noise level = {:.1f}".format(alpha, beta, n))
+print("Insertion max restarts = 50. Pooling number = 500.")
 
 Res = 121
 sigma = 0.015
@@ -92,7 +111,7 @@ if __name__ == "__main__":
     print("Main routine started.")
     kernel = Gaussian_kernel.GaussianKernel(Res,sigma)    
     print("Kernel initialised.")
-    DGCG.set_model_parameters(0.2,0.02,TIMESAMPLES, np.ones(T,dtype=int)*(Res**2), kernel.eval, kernel.grad)
+    DGCG.set_model_parameters(alpha,beta,TIMESAMPLES, np.ones(T,dtype=int)*(Res**2), kernel.eval, kernel.grad)
     print("Model initilised.")
 
     #-----------------------------
@@ -109,20 +128,18 @@ if __name__ == "__main__":
     #-----------------------------
 
     simulation_parameters = {
-        "insertion_max_restarts": algorithm_args[1],
+        "insertion_max_restarts": 50,
         "insertion_min_restarts": 10,
         #"results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "results_folder": "seg={},restarts={},pooling={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": algorithm_args[2],
+        #"results_folder": "seg={},restarts={},pooling={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
+        "results_folder": "w={},n={:.1f},k={:.1f},date={}".format(algorithm_args[2],algorithm_args[1],algorithm_args[0],strftime("%m%d%H%M",localtime())),
+        "multistart_pooling_num": 500,
         "insertion_min_segments": 1,
-        "insertion_max_segments": algorithm_args[0],
+        "insertion_max_segments": 15,
         "TOL": 10**(-8)
     }
 	
     DGCG.config.time_limit = False
-    #DGCG.config.multistart_proposition_max_iter = 100000
-    #DGCG.config.full_max_time = 720000
-    DGCG.config.interpolation_sampling = False
 
     print("Solve about to start.")
     solution_measure = DGCG.solve(data, **simulation_parameters)

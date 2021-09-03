@@ -23,7 +23,7 @@ import sys
 import numpy as np
 
 # Local imports
-from . import classes, config, checker
+from . import classes, config
 
 # Useful class
 class ordered_list_of_lists:
@@ -352,7 +352,7 @@ def modified_rejection_sampling(t, w_t, x_0):
         the total number of time samples of the inverse problem.
     w_t : :py:class:`src.classes.dual_variable`
         Dual variable associated with the current iterate.
-    x_0 : numpy.ndarray of shape (1,2)
+    x_0 : numpy.ndarray of shape (2,)
         This is the point at which our interpolation is centred
 
     Returns
@@ -360,7 +360,6 @@ def modified_rejection_sampling(t, w_t, x_0):
     numpy.ndarray
         A random point in Ω = [0,1]^2.
     """
-    assert checker.is_in_space_domain(x_0)
     iter_reasonable_threshold = 1000
     iter_index = 0
     while iter_index < iter_reasonable_threshold:

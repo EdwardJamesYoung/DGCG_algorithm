@@ -368,7 +368,7 @@ def modified_rejection_sampling(t, w_t, x_0):
         i = 0
         while i < reasonable_threshold:
             sample = np.array([np.random.normal(x_0, config.k)])
-            if sample[0] < 0 or sample[0] > 1 or sample[1] < 0 or sample[1] > 1:
+            if sample[0,0] < 0 or sample[0,0] > 1 or sample[0,1] < 0 or sample[0,1] > 1:
                 i = i + 1
             else:
                 h = w_t._density_transformation(t, w_t.eval(t, sample))

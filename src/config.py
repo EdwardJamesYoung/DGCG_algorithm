@@ -152,7 +152,7 @@ candidates that have values barely above 0.
 """
 
 #Modified rejection sampling control parameters
-k = 0.3
+k = 0.4
 """
 float.
 """

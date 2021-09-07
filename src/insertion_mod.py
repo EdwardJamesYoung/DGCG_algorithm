@@ -236,7 +236,6 @@ def random_insertion(w_t):
     def sample_random_curve(w_t):
         if config.interpolation_sampling:
             #This samples curves using linear interpolation weighting.
-            print("Interpolation sampling proposal.")
             n = config.sparse_control
             considered_times = np.round(np.linspace(1,config.T,n+1)).astype(int) - 1
             positions = rejection_sampling(0, w_t)

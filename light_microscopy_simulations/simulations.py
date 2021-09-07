@@ -52,13 +52,19 @@ noise_levels = np.array([0,0.2,0.5])
 weight = np.array([2,5])
 
 algorithm_args = np.array([ [k,n,w] for k,n,w in itertools.product(interpolation_spread,noise_levels,weight)])[index - 1]
-"""
 
 interpolation = np.array([False,True])
 noise_levels = np.array([0,0.2,0.5])
 trial = np.array([1,2,3,4])
 
 algorithm_args = np.array([ [n,t,i] for n,t,i in itertools.product(noise_levels,trial,interpolation)])[index - 1]
+"""
+
+weights = np.array([5,8])
+noise_levels = np.array([0.8,1.4,2.0])
+trial = np.array([1,2,3,4])
+
+algorithm_args = np.array([ [n,t,w] for n,t,w in itertools.product(noise_levels,trial,weights)])[index - 1]
 
 #-----------------------------
 
@@ -70,23 +76,25 @@ from src import DGCG
 from light_microscopy_simulations import Gaussian_kernel
 print('Imported DGCG and Gaussian_kernel.')
 
-DGCG.config.interpolation_sampling = algorithm_args[2]
-if not algorithm_args[2]:
+DGCG.config.interpolation_sampling = True
+if not DGCG.config.interpolation_sampling:
     print("Interpolation sampling: OFF. Insertion max segments = 15")
 else:
     print("Interpolation sampling: ON. k = 0.4")
+    DGCG.config.sparse_control = 6
 
 n = algorithm_args[0]
-alpha = 0.5
-beta = 0.05
+w = algorithm_args[2]
+alpha = 0.1*w
+beta = 0.01*w
 print("alpha = {:.2f}, beta = {:.2f}".format(alpha,beta))
-print("Noise level = {:.1f}".format(algorithm_args[0]))
-print("Insertion max restarts = 50. Pooling number = 500.")
+print("Noise level = {:.1f}".format(n))
+print("Insertion max restarts = 50. Pooling number = 750.")
 
 trial_no = algorithm_args[1]
 
 Res = 121
-sigma = 0.015
+sigma = 0.01
 T = 51
 TIMESAMPLES = np.linspace(0,1,T)
 
@@ -169,10 +177,10 @@ if __name__ == "__main__":
         #"results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         #"results_folder": "seg={},restarts={},pooling={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         #"results_folder": "w={},n={:.1f},k={:.1f},date={}".format(algorithm_args[2],algorithm_args[1],algorithm_args[0],strftime("%m%d%H%M",localtime())),
-        "results_folder": "n={:.1f},t={},i={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": 500,
+        "results_folder": "n={:.1f},t={},w={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
+        "multistart_pooling_num": 750,
         "insertion_min_segments": 1,
-        "insertion_max_segments": 15,
+        "insertion_max_segments": 10,
         "TOL": 10**(-8)
     }
 	

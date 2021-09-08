@@ -60,11 +60,10 @@ trial = np.array([1,2,3,4])
 algorithm_args = np.array([ [n,t,i] for n,t,i in itertools.product(noise_levels,trial,interpolation)])[index - 1]
 """
 
-weights = np.array([5,8])
 noise_levels = np.array([0.8,1.4,2.0])
 trial = np.array([1,2,3,4])
 
-algorithm_args = np.array([ [n,t,w] for n,t,w in itertools.product(noise_levels,trial,weights)])[index - 1]
+algorithm_args = np.array([ [n,t] for n,t in itertools.product(noise_levels,trial)])[index - 1]
 
 #-----------------------------
 
@@ -84,12 +83,12 @@ else:
     DGCG.config.sparse_control = 6
 
 n = algorithm_args[0]
-w = algorithm_args[2]
+w = 5
 alpha = 0.1*w
 beta = 0.01*w
 print("alpha = {:.2f}, beta = {:.2f}".format(alpha,beta))
 print("Noise level = {:.1f}".format(n))
-print("Insertion max restarts = 50. Pooling number = 750.")
+print("Insertion max restarts = 75. Pooling number = 1000.")
 
 trial_no = algorithm_args[1]
 
@@ -172,16 +171,16 @@ if __name__ == "__main__":
     #-----------------------------
 
     simulation_parameters = {
-        "insertion_max_restarts": 50,
+        "insertion_max_restarts": 75,
         "insertion_min_restarts": 10,
         #"results_folder": "a={:.2f},b={:.2f},n={:.1f},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         #"results_folder": "seg={},restarts={},pooling={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
         #"results_folder": "w={},n={:.1f},k={:.1f},date={}".format(algorithm_args[2],algorithm_args[1],algorithm_args[0],strftime("%m%d%H%M",localtime())),
-        "results_folder": "n={:.1f},t={},w={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
-        "multistart_pooling_num": 750,
+        "results_folder": "n={:.1f},t={},date={}".format(*algorithm_args,strftime("%m%d%H%M",localtime())),
+        "multistart_pooling_num": 1000,
         "insertion_min_segments": 1,
         "insertion_max_segments": 10,
-        "TOL": 10**(-8)
+        "TOL": 10**(-10)
     }
 	
     DGCG.config.time_limit = False

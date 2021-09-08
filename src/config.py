@@ -139,7 +139,7 @@ The second way (which occurs if this value is True) is to sample at
 sparse time points first, and then use those to guide further sampling
 """
 
-rejection_sampling_epsilon = 0.05
+rejection_sampling_epsilon = 0.03
 """
 float.
 When generating random curves for insertion at
@@ -160,9 +160,6 @@ sparse_control = 6
 """
 int.
 """
-
-#interpolation_pooling_number = 4
-
 
 
 insertion_length_bound_factor = 1.2

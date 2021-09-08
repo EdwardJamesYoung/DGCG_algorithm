@@ -60,7 +60,7 @@ trial = np.array([1,2,3,4])
 algorithm_args = np.array([ [n,t,i] for n,t,i in itertools.product(noise_levels,trial,interpolation)])[index - 1]
 """
 
-noise_levels = np.array([0.8,1.4,2.0])
+noise_levels = np.array([1.5,2.0,2.5])
 trial = np.array([1,2,3,4])
 
 algorithm_args = np.array([ [n,t] for n,t in itertools.product(noise_levels,trial)])[index - 1]
